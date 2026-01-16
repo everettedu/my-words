@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Words</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #EAF4F4;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    border: none;
+    border-radius: 20px;
+    font-size: 26px;
+    padding: 20px;
+    margin: 10px;
+    width: 80%;
+    background-color: #CDE8E5;
+}
+
+button:active {
+    background-color: #B2DAD7;
+}
+
+h1 {
+    font-size: 36px;
+    margin-top: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background-color: #CDE8E5;
+    border-radius: 20px;
+    padding: 30px;
+    font-size: 24px;
+}
+
+.nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #EAF4F4;
+}
+</style>
+</head>
+
+<body>
+
+<div id="home">
+    <h1>My Words</h1>
+    <button onclick="showPage('want')">🗣️ I WANT</button>
+    <button onclick="showPage('see')">👀 I SEE</button>
+    <button onclick="showPage('feel')">🙂 I FEEL</button>
+</div>
+
+<div id="want" class="hidden">
+    <h1>I want...</h1>
+    <div class="grid">
+        <div class="card" onclick="speak('I want water')">🧃 Water</div>
+        <div class="card" onclick="speak('I want food')">🍎 Food</div>
+        <div class="card" onclick="speak('I want my toy')">🧸 Toy</div>
+        <div class="card" onclick="speak('I want the toilet')">🚽 Toilet</div>
+        <div class="card" onclick="speak('I want a hug')">🤗 Hug</div>
+        <div class="card" onclick="speak('I want a break')">⏸️ Break</div>
+    </div>
+    <div class="nav">
+        <button onclick="showPage('home')">⬅ Home</button>
+        <button onclick="repeatSpeech()">🔊 Repeat</button>
+    </div>
+</div>
+
+<div id="see" class="hidden">
+    <h1>I see...</h1>
+    <div class="card" id="seeCard" onclick="nextSee()">🐶 Dog</div>
+    <div class="nav">
+        <button onclick="showPage('home')">⬅ Home</button>
+        <button onclick="repeatSpeech()">🔊 Repeat</button>
+    </div>
+</div>
+
+<div id="feel" class="hidden">
+    <h1>I feel...</h1>
+    <div class="grid">
+        <div class="card" onclick="speak('I feel happy')">🙂 Happy</div>
+        <div class="card" onclick="speak('I feel sad')">😢 Sad</div>
+        <div class="card" onclick="speak('I feel angry')">😠 Angry</div>
+        <div class="card" onclick="speak('I feel tired')">😴 Tired</div>
+    </div>
+    <div class="nav">
+        <button onclick="showPage('home')">⬅ Home</button>
+        <button onclick="repeatSpeech()">🔊 Repeat</button>
+    </div>
+</div>
+
+<script>
+function showPage(page) {
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('want').classList.add('hidden');
+    document.getElementById('see').classList.add('hidden');
+    document.getElementById('feel').classList.add('hidden');
+    document.getElementById(page).classList.remove('hidden');
+}
+
+let lastSpeech = '';
+
+function speak(text) {
+    lastSpeech = text;
+    let utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.8;
+    speechSynthesis.speak(utter);
+}
+
+function repeatSpeech() {
+    if (lastSpeech) speak(lastSpeech);
+}
+
+const seeItems = [
+    { emoji: "🐶", word: "dog" },
+    { emoji: "🚗", word: "car" },
+    { emoji: "🐱", word: "cat" },
+    { emoji: "🍎", word: "apple" }
+];
+
+let seeIndex = 0;
+
+function nextSee() {
+    let item = seeItems[seeIndex];
+    document.getElementById('seeCard').innerHTML = `${item.emoji} ${item.word}`;
+    speak(`I see a ${item.word}`);
+    seeIndex = (seeIndex + 1) % seeItems.length;
+}
+</script>
+
+</body>
+</html>
